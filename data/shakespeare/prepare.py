@@ -16,6 +16,9 @@ n = len(data)
 train_data = data[:int(n*0.9)]
 val_data = data[int(n*0.9):]
 
+# print(f"train has {len(train_data):,} characters")##train has 1,003,854 characters
+# print(train_data[:100])##First 100 characters of train data
+# print(f"val has {len(val_data):,} characters")##val has 111,540 characters
 # encode with tiktoken gpt2 bpe
 enc = tiktoken.get_encoding("gpt2")
 train_ids = enc.encode_ordinary(train_data)

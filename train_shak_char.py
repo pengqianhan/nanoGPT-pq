@@ -213,7 +213,7 @@ if block_size < model.config.block_size:##block_size = 256 for shakespear_char
 model.to(device)
 
 # initialize a GradScaler. If enabled=False scaler is a no-op
-scaler = torch.cuda.amp.GradScaler(enabled=(dtype == 'float16'))
+scaler = torch.cuda.amp.GradScaler(enabled=(dtype == 'float16'))##为了支持混合精度训练而设置的
 
 # optimizer
 optimizer = model.configure_optimizers(weight_decay, learning_rate, (beta1, beta2), device_type)
@@ -250,10 +250,10 @@ def estimate_loss():
 # learning rate decay scheduler (cosine with warmup)
 def get_lr(it):
     # 1) linear warmup for warmup_iters steps
-    if it < warmup_iters:
+    if it < warmup_iters:##warmup_iters = 100
         return learning_rate * it / warmup_iters
     # 2) if it > lr_decay_iters, return min learning rate
-    if it > lr_decay_iters:
+    if it > lr_decay_iters:#lr_decay_iters = 5000
         return min_lr
     # 3) in between, use cosine decay down to min learning rate
     decay_ratio = (it - warmup_iters) / (lr_decay_iters - warmup_iters)
@@ -275,7 +275,7 @@ running_mfu = -1.0
 while True:
 
     # determine and set the learning rate for this iteration
-    lr = get_lr(iter_num) if decay_lr else learning_rate
+    lr = get_lr(iter_num) if decay_lr else learning_rate ### learning_rate = 1e-3 
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
 
